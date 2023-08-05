@@ -1,0 +1,56 @@
+-- Create the database
+CREATE DATABASE project_sample;
+
+-- Use the database
+USE project_sample;
+
+-- Create the Musician table
+CREATE TABLE Musician (
+    SSN INT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Address VARCHAR(200) NOT NULL,
+    PhoneNumber VARCHAR(15) NOT NULL
+);
+
+-- Create the Instrument table
+CREATE TABLE Instrument (
+    InstrumentID INT PRIMARY KEY,
+    Name VARCHAR(50) NOT NULL,
+    Musical_Key VARCHAR(10) NOT NULL
+);
+
+-- Create the Album table
+CREATE TABLE Album (
+    Album_ID INT PRIMARY KEY,
+    Title VARCHAR(100) NOT NULL,
+    CopyrightDate DATE NOT NULL,
+    Format VARCHAR(10) NOT NULL,
+    Album_Identifier VARCHAR(50) NOT NULL,
+    Producer_SSN INT,
+    FOREIGN KEY (Producer_SSN) REFERENCES Musician (SSN) ON DELETE CASCADE
+);
+
+-- Create the Song table
+CREATE TABLE Song (
+    Song_ID INT PRIMARY KEY,
+    Title VARCHAR(100) NOT NULL,
+    Author VARCHAR(100) NOT NULL
+);
+
+-- Create the MusicianInstrument table for the many-to-many relationship
+CREATE TABLE Musician_Instrument (
+    Musician_SSN INT,
+    InstrumentID INT,
+    PRIMARY KEY (Musician_SSN, InstrumentID),
+    FOREIGN KEY (Musician_SSN) REFERENCES Musician (SSN) ON DELETE CASCADE,
+    FOREIGN KEY (InstrumentID) REFERENCES Instrument (InstrumentID) ON DELETE CASCADE
+);
+
+-- Create the AlbumSong table for the many-to-many relationship
+CREATE TABLE Album_Song (
+    Album_ID INT,
+    Song_ID INT,
+    PRIMARY KEY (Album_ID, Song_ID),
+    FOREIGN KEY (Album_ID) REFERENCES Album (Album_ID) ON DELETE CASCADE,
+    FOREIGN KEY (Song_ID) REFERENCES Song (Song_ID) ON DELETE CASCADE
+);
